@@ -3,11 +3,6 @@
     public class IssueDto
     {
         /// <summary>
-        /// Project Id
-        /// </summary>
-        public string Id { get; set; }
-
-        /// <summary>
         /// Issue number
         /// </summary>
         public int IssueNumber { get; set; }
@@ -20,6 +15,6 @@
         /// <summary>
         /// Description
         /// </summary>
-        public string Description { get; set; }
+        public string Body { get; set; }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using GitIssueManager.Core.Dtos;
+using System.Text.Json;
+using System.Text;
 
 namespace GitIssueManager.Core.Strategies
 {
@@ -7,28 +9,54 @@ namespace GitIssueManager.Core.Strategies
     /// </summary>
     public class GitLabStrategy : IServiceStrategy
     {
-        private readonly HttpClient _http;
+        private readonly HttpClient _httpClient;
 
-        public GitLabStrategy(HttpClient http)
+        public GitLabStrategy(HttpClient httpClient)
         {
-            _http = http;
+            _httpClient = httpClient;
         }
 
         public bool Supports(GitHostingServiceType gitHostingServiceType) => gitHostingServiceType == GitHostingServiceType.GitLab;
 
-        public Task<IssueDto> CreateAsync(IssueDto dto)
+        public async Task<IssueDto> CreateAsync(IssueDto dto)
         {
-            throw new NotImplementedException();
+            var json = JsonSerializer.Serialize(new
+            {
+                title = dto.Title,
+                body = dto.Body
+            });
+
+            using var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var resp = await _httpClient.PostAsync(string.Empty, content);
+            resp.EnsureSuccessStatusCode();
+            using var doc = await JsonDocument.ParseAsync(await resp.Content.ReadAsStreamAsync());
+            dto.IssueNumber = doc.RootElement.GetProperty("iid").GetInt32();
+            return dto;
         }
 
-        public Task<IssueDto> UpdateAsync(IssueDto dto)
+        public async Task<IssueDto> UpdateAsync(IssueDto dto)
         {
-            throw new NotImplementedException();
+            var json = JsonSerializer.Serialize(new
+            {
+                title = dto.Title,
+                body = dto.Body
+            });
+
+            using var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var resp = await _httpClient.PutAsync($"/{dto.IssueNumber}", content);
+            resp.EnsureSuccessStatusCode();
+            return dto;
         }
 
-        public Task CloseAsync(IssueDto dto)
+        public async Task CloseAsync(IssueDto dto)
         {
-            throw new NotImplementedException();
+            var json = JsonSerializer.Serialize(new { state_event = "close" });
+
+            using var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var resp = await _httpClient.PutAsync($"/{dto.IssueNumber}", content);
+            resp.EnsureSuccessStatusCode();
         }
     }
 }
