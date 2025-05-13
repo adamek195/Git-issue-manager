@@ -1,7 +1,6 @@
 ﻿using GitIssueManager.Core.Dtos;
 using System.Text;
 using System.Text.Json;
-using static System.Net.WebRequestMethods;
 
 namespace GitIssueManager.Core.Strategies
 {
@@ -61,7 +60,6 @@ namespace GitIssueManager.Core.Strategies
             using var content = new StringContent(json, Encoding.UTF8, "application/json");
             var resp = await _httpClient.PatchAsync($"/{dto.IssueNumber}", content);
             resp.EnsureSuccessStatusCode();
-            );
         }
     }
 }
