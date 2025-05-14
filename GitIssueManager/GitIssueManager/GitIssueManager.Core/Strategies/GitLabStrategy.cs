@@ -15,7 +15,7 @@ namespace GitIssueManager.Core.Strategies
 
         public bool Supports(GitHostingServiceType gitHostingServiceType) => gitHostingServiceType == GitHostingServiceType.GitLab;
 
-        public async Task<IssueDto> CreateAsync(IssueCommandDto dto)
+        public async Task<IssueDto> CreateAsync(IssueCommandDto dto, CancellationToken cancellationToken)
         {
             var project = Uri.EscapeDataString($"{dto.Owner}/{dto.Repo}");
             var json = JsonSerializer.Serialize(new
@@ -26,14 +26,14 @@ namespace GitIssueManager.Core.Strategies
 
             using var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var resp = await _httpClient.PostAsync($"projects/{project}/issues", content);
+            var resp = await _httpClient.PostAsync($"projects/{project}/issues", content, cancellationToken);
             resp.EnsureSuccessStatusCode();
-            using var doc = await JsonDocument.ParseAsync(await resp.Content.ReadAsStreamAsync());
+            using var doc = await JsonDocument.ParseAsync(await resp.Content.ReadAsStreamAsync(cancellationToken));
             var number = doc.RootElement.GetProperty("iid").GetInt32();
             return new IssueDto { IssueNumber = number, Body = dto.Body, Title = dto.Title };
         }
 
-        public async Task<IssueDto> UpdateAsync(int issueNumber, IssueCommandDto dto)
+        public async Task<IssueDto> UpdateAsync(int issueNumber, IssueCommandDto dto, CancellationToken cancellationToken)
         {
             var project = Uri.EscapeDataString($"{dto.Owner}/{dto.Repo}");
             var json = JsonSerializer.Serialize(new
@@ -44,18 +44,18 @@ namespace GitIssueManager.Core.Strategies
 
             using var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var resp = await _httpClient.PutAsync($"projects/{project}/issues/{issueNumber}", content);
+            var resp = await _httpClient.PutAsync($"projects/{project}/issues/{issueNumber}", content, cancellationToken);
             resp.EnsureSuccessStatusCode();
             return new IssueDto { IssueNumber = issueNumber, Body = dto.Body, Title = dto.Title };
         }
 
-        public async Task CloseAsync(int issueNumber, StateIssueDto dto)
+        public async Task CloseAsync(int issueNumber, StateIssueDto dto, CancellationToken cancellationToken)
         {
             var project = Uri.EscapeDataString($"{dto.Owner}/{dto.Repo}");
             var json = JsonSerializer.Serialize(new { state_event = "close" });
 
             using var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var resp = await _httpClient.PutAsync($"projects/{project}/issues/{issueNumber}", content);
+            var resp = await _httpClient.PutAsync($"projects/{project}/issues/{issueNumber}", content, cancellationToken);
             resp.EnsureSuccessStatusCode();
         }
     }

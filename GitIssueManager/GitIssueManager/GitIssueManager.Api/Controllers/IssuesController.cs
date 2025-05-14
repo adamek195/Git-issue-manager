@@ -17,7 +17,7 @@ namespace GitIssueManager.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(string service, [FromBody] IssueCommandDto dto)
+        public async Task<IActionResult> Create(string service, [FromBody] IssueCommandDto dto, CancellationToken cancellationToken)
         {
             if (!Enum.TryParse<GitHostingServiceType>(service, true, out var hostingType))
                 return BadRequest(new { error = $"Unsupported service '{service}'." });
@@ -26,13 +26,13 @@ namespace GitIssueManager.Api.Controllers
             if (strategy is null)
                 return NotFound(new { error = $"Manager not support service '{service}'." });
 
-            var created = await strategy.CreateAsync(dto);
+            var created = await strategy.CreateAsync(dto, cancellationToken);
 
             return Created($"api/{service}/issues/{created.IssueNumber}", created);
         }
 
         [HttpPatch("{issueNumber:int:min(1)}")]
-        public async Task<IActionResult> Update(string service, int issueNumber, [FromBody] IssueCommandDto dto)
+        public async Task<IActionResult> Update(string service, int issueNumber, [FromBody] IssueCommandDto dto, CancellationToken cancellationToken)
         {
             if (!Enum.TryParse<GitHostingServiceType>(service, true, out var hostingType))
                 return BadRequest(new { error = $"Unsupported service '{service}'." });
@@ -41,12 +41,12 @@ namespace GitIssueManager.Api.Controllers
             if (strategy is null)
                 return NotFound(new { error = $"Manager not support service '{service}'." });
 
-            var updated = await strategy.UpdateAsync(issueNumber, dto);
+            var updated = await strategy.UpdateAsync(issueNumber, dto, cancellationToken);
             return Ok(updated);
         }
 
         [HttpPatch("{issueNumber:int:min(1)}/close")]
-        public async Task<IActionResult> Close(string service, int issueNumber, [FromBody] StateIssueDto dto)
+        public async Task<IActionResult> Close(string service, int issueNumber, [FromBody] StateIssueDto dto, CancellationToken cancellationToken)
         {
             if (!Enum.TryParse<GitHostingServiceType>(service, true, out var hostingType))
                 return BadRequest(new { error = $"Unsupported service '{service}'." });
@@ -55,7 +55,7 @@ namespace GitIssueManager.Api.Controllers
             if (strategy is null)
                 return NotFound(new { error = $"Manager not support service '{service}'." });
 
-            await strategy.CloseAsync(issueNumber, dto);
+            await strategy.CloseAsync(issueNumber, dto, cancellationToken);
             return NoContent();
         }
 

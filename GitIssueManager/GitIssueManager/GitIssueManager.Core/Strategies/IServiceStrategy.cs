@@ -6,10 +6,10 @@ namespace GitIssueManager.Core.Strategies
     {
         bool Supports(GitHostingServiceType gitHostingServiceType);
 
-        Task<IssueDto> CreateAsync(IssueCommandDto dto);
+        Task<IssueDto> CreateAsync(IssueCommandDto dto, CancellationToken cancellationToken);
 
-        Task<IssueDto> UpdateAsync(int issueNumber, IssueCommandDto dto);
+        Task<IssueDto> UpdateAsync(int issueNumber, IssueCommandDto dto, CancellationToken cancellationToken);
 
-        Task CloseAsync(int issueNumber, StateIssueDto dto);
+        Task CloseAsync(int issueNumber, StateIssueDto dto, CancellationToken cancellationToken);
     }
 }
