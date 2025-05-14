@@ -19,20 +19,21 @@ namespace GitIssueManager.Core.Strategies
         /// </summary>
         /// <param name="dto">Issue dto</param>
         /// <returns></returns>
-        Task<IssueDto> CreateAsync(IssueDto dto);
+        Task<IssueDto> CreateAsync(IssueCommandDto dto);
 
         /// <summary>
         /// Update Issue
         /// </summary>
+        /// <param name="issueNumber">number of issue</param>
         /// <param name="dto">Issue dto</param>
         /// <returns></returns>
-        Task<IssueDto> UpdateAsync(IssueDto dto);
+        Task<IssueDto> UpdateAsync(int issueNumber, IssueCommandDto dto);
 
         /// <summary>
         /// Close Issue
         /// </summary>
-        /// <param name="dto">Issue dto</param>
+        /// <param name="issueNumber">number of issue</param>
         /// <returns></returns>
-        Task CloseAsync(IssueDto dto);
+        Task CloseAsync(int issueNumber, IssueCommandDto dto);
     }
 }

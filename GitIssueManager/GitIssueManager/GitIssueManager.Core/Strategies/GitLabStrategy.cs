@@ -1,6 +1,7 @@
 ﻿using GitIssueManager.Core.Dtos;
 using System.Text.Json;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GitIssueManager.Core.Strategies
 {
@@ -18,8 +19,9 @@ namespace GitIssueManager.Core.Strategies
 
         public bool Supports(GitHostingServiceType gitHostingServiceType) => gitHostingServiceType == GitHostingServiceType.GitLab;
 
-        public async Task<IssueDto> CreateAsync(IssueDto dto)
+        public async Task<IssueDto> CreateAsync(IssueCommandDto dto)
         {
+            var project = Uri.EscapeDataString($"{dto.Owner}/{dto.Repo}");
             var json = JsonSerializer.Serialize(new
             {
                 title = dto.Title,
@@ -28,15 +30,16 @@ namespace GitIssueManager.Core.Strategies
 
             using var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var resp = await _httpClient.PostAsync(string.Empty, content);
+            var resp = await _httpClient.PostAsync($"projects/{project}/issues", content);
             resp.EnsureSuccessStatusCode();
             using var doc = await JsonDocument.ParseAsync(await resp.Content.ReadAsStreamAsync());
-            dto.IssueNumber = doc.RootElement.GetProperty("iid").GetInt32();
-            return dto;
+            var number = doc.RootElement.GetProperty("iid").GetInt32();
+            return new IssueDto { IssueNumber = number, Body = dto.Body, Title = dto.Title };
         }
 
-        public async Task<IssueDto> UpdateAsync(IssueDto dto)
+        public async Task<IssueDto> UpdateAsync(int issueNumber, IssueCommandDto dto)
         {
+            var project = Uri.EscapeDataString($"{dto.Owner}/{dto.Repo}");
             var json = JsonSerializer.Serialize(new
             {
                 title = dto.Title,
@@ -45,17 +48,18 @@ namespace GitIssueManager.Core.Strategies
 
             using var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var resp = await _httpClient.PutAsync($"/{dto.IssueNumber}", content);
+            var resp = await _httpClient.PutAsync($"projects/{project}/issues/{issueNumber}", content);
             resp.EnsureSuccessStatusCode();
-            return dto;
+            return new IssueDto { IssueNumber = issueNumber, Body = dto.Body, Title = dto.Title };
         }
 
-        public async Task CloseAsync(IssueDto dto)
+        public async Task CloseAsync(int issueNumber, IssueCommandDto dto)
         {
+            var project = Uri.EscapeDataString($"{dto.Owner}/{dto.Repo}");
             var json = JsonSerializer.Serialize(new { state_event = "close" });
 
             using var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var resp = await _httpClient.PutAsync($"/{dto.IssueNumber}", content);
+            var resp = await _httpClient.PutAsync($"projects/{project}/issues/{issueNumber}", content);
             resp.EnsureSuccessStatusCode();
         }
     }
