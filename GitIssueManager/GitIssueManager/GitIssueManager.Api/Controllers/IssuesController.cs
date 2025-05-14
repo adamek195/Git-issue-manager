@@ -46,7 +46,7 @@ namespace GitIssueManager.Api.Controllers
         }
 
         [HttpPatch("{issueNumber:int:min(1)}/close")]
-        public async Task<IActionResult> Close(string service, int issueNumber, [FromBody] IssueCommandDto dto)
+        public async Task<IActionResult> Close(string service, int issueNumber, [FromBody] StateIssueDto dto)
         {
             if (!Enum.TryParse<GitHostingServiceType>(service, true, out var hostingType))
                 return BadRequest(new { error = $"Unsupported service '{service}'." });

@@ -4,9 +4,6 @@ using System.Text.Json;
 
 namespace GitIssueManager.Core.Strategies
 {
-    /// <summary>
-    /// Strategy for GitHubService
-    /// </summary>
     public class GitHubStrategy : IServiceStrategy
     {
         private readonly HttpClient _httpClient;
@@ -49,7 +46,7 @@ namespace GitIssueManager.Core.Strategies
             return new IssueDto { IssueNumber = issueNumber, Body = dto.Body, Title = dto.Title }; ;
         }
 
-        public async Task CloseAsync(int issueNumber, IssueCommandDto dto)
+        public async Task CloseAsync(int issueNumber, StateIssueDto dto)
         {
             var json = JsonSerializer.Serialize(new { state = "closed" });
 

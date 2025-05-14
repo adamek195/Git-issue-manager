@@ -1,13 +1,9 @@
 ﻿using GitIssueManager.Core.Dtos;
 using System.Text.Json;
 using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GitIssueManager.Core.Strategies
 {
-    /// <summary>
-    /// Strategy for GitLabService
-    /// </summary>
     public class GitLabStrategy : IServiceStrategy
     {
         private readonly HttpClient _httpClient;
@@ -53,7 +49,7 @@ namespace GitIssueManager.Core.Strategies
             return new IssueDto { IssueNumber = issueNumber, Body = dto.Body, Title = dto.Title };
         }
 
-        public async Task CloseAsync(int issueNumber, IssueCommandDto dto)
+        public async Task CloseAsync(int issueNumber, StateIssueDto dto)
         {
             var project = Uri.EscapeDataString($"{dto.Owner}/{dto.Repo}");
             var json = JsonSerializer.Serialize(new { state_event = "close" });
