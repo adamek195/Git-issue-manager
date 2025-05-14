@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  git-issue-manager:
+    build:
+      context: ./GitIssueManager/GitIssueManager
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:5000
+      IssueServices__GitHub__UserAgent: ${GITHUB_USER_AGENT:-GitIssueManager}
+      IssueServices__GitHub__Url:       ${GITHUB_URL:-https://api.github.com/}
+      IssueServices__GitHub__Token:     ${GITHUB_TOKEN}
+
+      IssueServices__GitLab__UserAgent: ${GITLAB_USER_AGENT:-GitIssueManager}
+      IssueServices__GitLab__Url:       ${GITLAB_URL:-https://gitlab.com/api/v4/}
+      IssueServices__GitLab__Token:     ${GITLAB_TOKEN}
