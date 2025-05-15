@@ -14,27 +14,28 @@ namespace GitIssueManager.Core.Configuration
 
             if (svcOpts.GitHub?.Enabled == true)
             {
-                services.AddHttpClient<IServiceStrategy, GitHubStrategy>(c =>
+                services.AddHttpClient<IServiceStrategy, GitHubStrategy>(
+                name: "GitHubClient",
+                configureClient: c =>
                 {
                     c.BaseAddress = new Uri(svcOpts.GitHub.Url);
                     c.DefaultRequestHeaders.UserAgent.ParseAdd(svcOpts.GitHub.UserAgent);
                     c.DefaultRequestHeaders.Authorization =
                         new AuthenticationHeaderValue("token", svcOpts.GitHub.Token);
                 });
-
-                services.AddSingleton<IServiceStrategy, GitHubStrategy>();
             }
 
             if (svcOpts.GitLab?.Enabled == true)
             {
-                services.AddHttpClient<IServiceStrategy, GitLabStrategy>(c =>
+                services.AddHttpClient<IServiceStrategy, GitLabStrategy>(
+                name: "GitLabClient",
+                configureClient: c =>
                 {
                     c.BaseAddress = new Uri(svcOpts.GitLab.Url);
                     c.DefaultRequestHeaders.UserAgent.ParseAdd(svcOpts.GitLab.UserAgent);
                     c.DefaultRequestHeaders.Authorization =
                         new AuthenticationHeaderValue("Bearer", svcOpts.GitLab.Token);
                 });
-                services.AddSingleton<IServiceStrategy, GitLabStrategy>();
             }
         }
     }
