@@ -10,19 +10,19 @@ Built with:
 
 1. In the main directory, create **.env** file and define environment variables:
 
-1.1 GitHub
+### GitHub
 
 - GITHUB_TOKEN - generate a Personal Access Token in GitHub
 - GITHUB_URL - https://api.github.com/
 - GITHUB_USER_AGENT - set user agent
 - GITHUB_ENABLED - set flag true or false
 
-1.2 GitLab
+### GitLab
 
-GITLAB_TOKEN- generate a Personal Access Token in GitLab
-GITLAB_URL - https://gitlab.com/api/v4/
-GITLAB_USER_AGENT - set user agent
-GITLAB_ENABLED - set flag true or false
+- GITLAB_TOKEN- generate a Personal Access Token in GitLab
+- GITLAB_URL - https://gitlab.com/api/v4/
+- GITLAB_USER_AGENT - set user agent
+- GITLAB_ENABLED - set flag true or false
 
 2. Create file **appsettings.json** with the same settings as in **appsettings.defualt.json** in GitIssueManager.Api folder.
 
