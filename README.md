@@ -26,7 +26,7 @@ Built with:
 
 2. Create file **appsettings.json** with the same settings as in **appsettings.defualt.json** in GitIssueManager.Api folder.
 
-3. In in appsetting.json, configure with the same environment variables defined in the **.env** file.
+3. In appsetting.json, configure with the same environment variables defined in the **.env** file.
 
 4. In the main directory run the commands:
 

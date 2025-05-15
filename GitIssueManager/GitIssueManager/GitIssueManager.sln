@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34916.146
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitIssueManager.Core", "GitIssueManager.Core\GitIssueManager.Core.csproj", "{CB35A0C2-6597-4796-A7D5-ECECFB87B305}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitIssueManager.Core", "GitIssueManager.Core\GitIssueManager.Core.csproj", "{CB35A0C2-6597-4796-A7D5-ECECFB87B305}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitIssueManager.Api", "GitIssueManager.Api\GitIssueManager.Api.csproj", "{7E01DAD4-8089-4ECA-B6E0-C13C08CBE769}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitIssueManager.Api", "GitIssueManager.Api\GitIssueManager.Api.csproj", "{7E01DAD4-8089-4ECA-B6E0-C13C08CBE769}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitIssueManager.Tests", "GitIssueManager.Tests\GitIssueManager.Tests.csproj", "{E9CAB206-0738-4B11-A3E4-B47467422849}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{7E01DAD4-8089-4ECA-B6E0-C13C08CBE769}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E01DAD4-8089-4ECA-B6E0-C13C08CBE769}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E01DAD4-8089-4ECA-B6E0-C13C08CBE769}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9CAB206-0738-4B11-A3E4-B47467422849}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9CAB206-0738-4B11-A3E4-B47467422849}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9CAB206-0738-4B11-A3E4-B47467422849}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9CAB206-0738-4B11-A3E4-B47467422849}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
